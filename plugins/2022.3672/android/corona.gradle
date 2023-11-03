@@ -1,0 +1,13 @@
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation 'com.pollfish:pollfish-googleplay:6.4.0'
+}
+
+android.defaultConfig {
+    minSdkVersion Math.max(minSdkVersion?.apiLevel ?: 15, 21)
+}
+ext["minSdkVersion"] = Math.max(ext.find("minSdkVersion")?:15, 21)

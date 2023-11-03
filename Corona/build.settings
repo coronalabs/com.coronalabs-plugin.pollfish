@@ -1,0 +1,35 @@
+settings =
+{
+	orientation =
+	{
+		default = "portrait",
+		supported = { "portrait" }
+	},
+
+	iphone =
+	{
+		xcassets = "Images.xcassets",
+		plist =
+		{
+			UILaunchStoryboardName = "LaunchScreen",
+		}
+	},
+
+	android =
+	{
+		minSdkVersion = "21",
+		usesPermissions =
+		{
+			"android.permission.INTERNET",
+			"android.permission.ACCESS_WIFI_STATE"
+		}
+	},
+
+	plugins =
+	{
+		["plugin.pollfish"] =
+		{
+			publisherId = "com.coronalabs"
+		}
+	}
+}
