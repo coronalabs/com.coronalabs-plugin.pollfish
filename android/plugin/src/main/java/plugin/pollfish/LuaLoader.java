@@ -537,6 +537,7 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener
       String apiKey = null;
       String requestUUID = null;
       boolean developerMode = false;
+      boolean rewardMode = false;
 
       // check number of arguments passed
       int nargs = luaState.getTop();
@@ -586,6 +587,15 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener
               return 0;
             }
           }
+          else if (key.equals("rewardMode")) {
+            if (luaState.type(-1) == LuaType.BOOLEAN ) {
+              rewardMode = luaState.toBoolean(-1);
+            }
+            else {
+              logMsg(ERROR_MSG, "options.rewardMode expected (boolean). Got " + luaState.typeName(-1));
+              return 0;
+            }
+          }
           else {
             logMsg(ERROR_MSG, "Invalid option '" + key + "'");
             return 0;
@@ -613,6 +623,8 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener
       // declare final values for inner class
       final String fApiKey = apiKey;
       final boolean fDeveloperMode = developerMode;
+      final boolean fRewardMode = rewardMode;
+
       final String fRequestUUID = requestUUID;
 
       // Create a new runnable object to invoke our activity
@@ -625,7 +637,7 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener
           pollfishObjects.put(DEVELOPER_MODE_KEY, fDeveloperMode);
           pollfishObjects.put(CUSTOM_MODE_KEY, false);
           pollfishObjects.put(OFFERWALL_MODE_KEY, false);
-          pollfishObjects.put(REWARD_MODE_KEY, false);
+          pollfishObjects.put(REWARD_MODE_KEY, fRewardMode);
           pollfishObjects.put(REQUEST_UUID_KEY, fRequestUUID);
 
           // log plugin version to device log

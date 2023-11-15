@@ -305,6 +305,7 @@ PollfishPlugin::init(lua_State *L)
   }
   
   const char *apiKey = NULL;
+  bool rewardMode = false;
   
   // check number of arguments passed
   int nargs = lua_gettop(L);
@@ -353,8 +354,15 @@ PollfishPlugin::init(lua_State *L)
           logMsg(L, ERROR_MSG, MsgFormat(@"options.requestUUID expected (string). Got %s", luaL_typename(L, -1)));
           return 0;
         }
-      }
-      else {
+      }else if (UTF8IsEqual(key, "rewardMode")) {
+          if (lua_type(L, -1) == LUA_TBOOLEAN ) {
+              [pollfishParams rewardMode:lua_toboolean(L, -1)];
+          }
+          else {
+            logMsg(L, ERROR_MSG, MsgFormat(@"options.rewardMode expected (boolean). Got %s", luaL_typename(L, -1)));
+            return 0;
+          }
+     } else {
         logMsg(L, ERROR_MSG, MsgFormat(@"Invalid option '%s'", key));
         return 0;
       }
@@ -379,7 +387,7 @@ PollfishPlugin::init(lua_State *L)
 	@(CoronaEventPhaseKey()) : PHASE_INIT
   };
   [pollfishDelegate dispatchLuaEvent:coronaEvent];
-    
+  [pollfishParams rewardMode:rewardMode];
   // Log plugin version to device log
   NSLog(@"%s: %s (SDK: %s)", PLUGIN_NAME, PLUGIN_VERSION, PLUGIN_SDK_VERSION);
   
@@ -541,7 +549,6 @@ PollfishPlugin::load(lua_State *L)
   // save values for pollfish request in delegate
   [pollfishParams indicatorPadding:padding];
   [pollfishParams indicatorPosition:pollfishPosition];
-  [pollfishParams rewardMode:rewardMode];
   [pollfishParams offerwallMode:offerwallMode];
   pollfishObjects[CUSTOM_MODE_KEY] = @(customMode);
   
